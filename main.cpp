@@ -3,10 +3,9 @@
 #include "JobSystem.h"
 #include "tests.h"
 
-void printNothing () {
-}
 
 int main() {
+	// demo JobSystem initialization
 	JobSystem js { 5 };
 
 	auto f1 = js.submit(printNew);
@@ -14,7 +13,9 @@ int main() {
 	auto f3 = js.submit(printNothing);
 
 	std::cout << f1.get() << f2.get() << '\n';
+	// necessary to end threads
 	js.end();
+
 	std::cout << "Execute benchmarks?(Y or n)\n";
 	char option;
 	std::cin >> option;

@@ -10,17 +10,25 @@
 class JobSystem {
 private:
 	int32_t m_jobs { static_cast<int>(std::thread::hardware_concurrency()) };
+
+	// mutex to prevent race while operating on the JobSystem class
 	std::mutex m_queue_mutex { };
+
+	// flag to indicate end of tasks
 	bool m_stop { };
 
 	using Job = std::function<void()>;
+	// job queue
 	std::queue <Job> m_job_queue;
+	// thread tracking queue
 	std::vector <std::thread> m_threads;
 
 	std::condition_variable cv { };
 
 public:
+	// worker loop
 	void worker ();
+
 	JobSystem (int32_t jobs);
 	JobSystem () {
 		m_jobs = static_cast<int>(std::thread::hardware_concurrency());
@@ -29,6 +37,7 @@ public:
 		}
 	}
 
+	// function to add tasks to jobsystem for processing
 	template <typename F>
 	auto submit (F&& f) -> std::future <decltype(f())>{
 		using RET = decltype(f());
@@ -45,6 +54,7 @@ public:
 		return result;
 	}
 
+	// cleanup after end of tasks
 	void end ();
 };
 

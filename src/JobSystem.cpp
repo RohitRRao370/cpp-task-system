@@ -20,6 +20,7 @@ void JobSystem::worker ()
 		Job job;
 		{
 			std::unique_lock<std::mutex> lock (m_queue_mutex);
+			// wait for signal indicating existing task
 			cv.wait (lock, [&] {
 					return m_stop || !m_job_queue.empty();
 					}
