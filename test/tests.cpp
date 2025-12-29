@@ -6,3 +6,7 @@ int printNew () {
 std::string printStr () {
 	return "Hello";
 }
+
+// display functionality with void return values
+void printNothing() {
+}

@@ -3,4 +3,5 @@
 #include <string>
 int printNew ();
 std::string printStr ();
+void printNothing ();
 #endif
