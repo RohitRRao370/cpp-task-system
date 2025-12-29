@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(job_system
     main.cpp
     src/JobSystem.cpp
+	benchmark/benchmark.cpp
+	test/tests.cpp
 )
 
 target_include_directories(job_system

@@ -22,7 +22,12 @@ private:
 public:
 	void worker ();
 	JobSystem (int32_t jobs);
-	JobSystem () { m_jobs = static_cast<int>(std::thread::hardware_concurrency()); };
+	JobSystem () {
+		m_jobs = static_cast<int>(std::thread::hardware_concurrency());
+		for (int i { 0 }; i < m_jobs; i++) {
+			m_threads.emplace_back(&JobSystem::worker, this);
+		}
+	}
 
 	template <typename F>
 	auto submit (F&& f) -> std::future <decltype(f())>{

@@ -1,13 +1,7 @@
 #include <iostream>
+#include "benchmark.h"
 #include "JobSystem.h"
-
-int printNew () {
-	return 3;
-}
-
-std::string printStr () {
-	return "Hello";
-}
+#include "tests.h"
 
 void printNothing () {
 }
@@ -21,5 +15,13 @@ int main() {
 
 	std::cout << f1.get() << f2.get() << '\n';
 	js.end();
+	std::cout << "Execute benchmarks?(Y or n)\n";
+	char option;
+	std::cin >> option;
+	if (option == 'n')
+		;
+	else {
+		benchmark();
+	}
 	return 0;
 }
