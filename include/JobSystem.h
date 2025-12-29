@@ -26,9 +26,6 @@ private:
 	std::condition_variable cv { };
 
 public:
-	// worker loop
-	void worker ();
-
 	JobSystem (int32_t jobs);
 	JobSystem () {
 		m_jobs = static_cast<int>(std::thread::hardware_concurrency());
@@ -36,6 +33,9 @@ public:
 			m_threads.emplace_back(&JobSystem::worker, this);
 		}
 	}
+
+	// worker loop
+	void worker ();
 
 	// function to add tasks to jobsystem for processing
 	template <typename F>
