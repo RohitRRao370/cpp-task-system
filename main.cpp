@@ -6,7 +6,7 @@
 
 int main() {
 	// demo JobSystem initialization
-	JobSystem js { 5 };
+	TaskSystem js { 5 };
 
 	auto f1 = js.submit(printNew);
 	auto f2 = js.submit(printStr);

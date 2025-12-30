@@ -22,7 +22,7 @@ void benchmark() {
 	std::cout << "Standard thread benchmark: " << std::chrono::duration<double>(end - start).count() << '\n';
 
 	auto startjs = std::chrono::steady_clock::now();
-	JobSystem js;
+	TaskSystem js;
 	std::vector<std::future<void>> futures;
 	futures.reserve(N);
 

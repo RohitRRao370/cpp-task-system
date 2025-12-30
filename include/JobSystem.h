@@ -7,7 +7,15 @@
 #include <thread>
 #include <mutex>
 
-class JobSystem {
+struct Job {
+    std::function<void()> task;
+
+    std::atomic<int> remaining_dependencies{0};
+
+    std::vector<Job*> dependents;
+};
+
+class TaskSystem {
 private:
 	int32_t m_jobs { static_cast<int>(std::thread::hardware_concurrency()) };
 
@@ -26,11 +34,11 @@ private:
 	std::condition_variable cv { };
 
 public:
-	JobSystem (int32_t jobs);
-	JobSystem () {
+	TaskSystem (int32_t jobs);
+	TaskSystem () {
 		m_jobs = static_cast<int>(std::thread::hardware_concurrency());
 		for (int i { 0 }; i < m_jobs; i++) {
-			m_threads.emplace_back(&JobSystem::worker, this);
+			m_threads.emplace_back(&TaskSystem::worker, this);
 		}
 	}
 

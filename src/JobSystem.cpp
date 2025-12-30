@@ -6,15 +6,15 @@
 #include <thread>
 #include "JobSystem.h"
 
-JobSystem::JobSystem(int jobs)
+TaskSystem::TaskSystem(int jobs)
 	: m_jobs (jobs)
 {
 	for (int i { 0 }; i < m_jobs; i++) {
-		m_threads.emplace_back(&JobSystem::worker, this);
+		m_threads.emplace_back(&TaskSystem::worker, this);
 	}
 }
 
-void JobSystem::worker ()
+void TaskSystem::worker ()
 {
 	while (true) {
 		Job job;
@@ -34,7 +34,7 @@ void JobSystem::worker ()
 		job();
 	}
 }
-void JobSystem::end () {
+void TaskSystem::end () {
 	{
 		std::lock_guard<std::mutex> lock (m_queue_mutex);
 		m_stop = true;
