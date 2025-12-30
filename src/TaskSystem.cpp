@@ -4,7 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <thread>
-#include "JobSystem.h"
+#include "TaskSystem.h"
 
 TaskSystem::TaskSystem(int tasks)
 	: m_tasks (tasks)

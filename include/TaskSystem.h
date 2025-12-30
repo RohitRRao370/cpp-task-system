@@ -1,5 +1,5 @@
-#ifndef JOB_SYSTEM_H
-#define JOB_SYSTEM_H
+#ifndef TASK_SYSTEM_H
+#define TASK_SYSTEM_H
 #include <future>
 #include <functional>
 #include <queue>

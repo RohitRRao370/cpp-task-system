@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
-project(JobSystem LANGUAGES CXX)
+project(TaskSystem LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(job_system
+add_executable(task_system
     main.cpp
-    src/JobSystem.cpp
+    src/TaskSystem.cpp
 	benchmark/benchmark.cpp
 	test/tests.cpp
 )
 
-target_include_directories(job_system
+target_include_directories(task_system
     PRIVATE
         ${PROJECT_SOURCE_DIR}/include
 )
