@@ -17,7 +17,7 @@ struct Job {
 
 class TaskSystem {
 private:
-	int32_t m_jobs { static_cast<int>(std::thread::hardware_concurrency()) };
+	int32_t m_tasks { static_cast<int>(std::thread::hardware_concurrency()) };
 
 	// mutex to prevent race while operating on the JobSystem class
 	std::mutex m_queue_mutex { };
@@ -25,19 +25,19 @@ private:
 	// flag to indicate end of tasks
 	bool m_stop { };
 
-	using Job = std::function<void()>;
+	using Task = std::function<void()>;
 	// job queue
-	std::queue <Job> m_job_queue;
+	std::queue <Task> m_task_queue;
 	// thread tracking queue
 	std::vector <std::thread> m_threads;
 
 	std::condition_variable cv { };
 
 public:
-	TaskSystem (int32_t jobs);
+	TaskSystem (int32_t tasks);
 	TaskSystem () {
-		m_jobs = static_cast<int>(std::thread::hardware_concurrency());
-		for (int i { 0 }; i < m_jobs; i++) {
+		m_tasks = static_cast<int>(std::thread::hardware_concurrency());
+		for (int i { 0 }; i < m_tasks; i++) {
 			m_threads.emplace_back(&TaskSystem::worker, this);
 		}
 	}
@@ -53,7 +53,7 @@ public:
 		auto result = task->get_future();
 		{
 			std::lock_guard <std::mutex> lock (m_queue_mutex);
-			m_job_queue.emplace ([task] {
+			m_task_queue.emplace ([task] {
 					(*task)();
 					}
 					);
