@@ -1,5 +1,6 @@
 # Build directories
 /build/
+/task-system/build/
 /cmake-build-*/
 
 # CMake generated files
