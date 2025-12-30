@@ -37,5 +37,5 @@ void benchmark() {
 	js.end();
 	auto endjs = std::chrono::steady_clock::now();
 
-	std::cout << "JobSystem benchmark: "<< std::chrono::duration<double>(endjs - startjs).count() << '\n';
+	std::cout << "TaskSystem benchmark: "<< std::chrono::duration<double>(endjs - startjs).count() << '\n';
 }
