@@ -1,12 +1,11 @@
 #include <functional>
-#include <iostream>
 #include <queue>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
 #include "TaskSystem.h"
 
-TaskSystem::TaskSystem(int tasks)
+TaskSystem::TaskSystem(int32_t tasks)
 	: m_tasks (tasks)
 {
 	for (int i { 0 }; i < m_tasks; i++) {
@@ -34,7 +33,7 @@ void TaskSystem::worker ()
 		task();
 	}
 }
-void TaskSystem::end () {
+TaskSystem::~TaskSystem () {
 	{
 		std::lock_guard<std::mutex> lock (m_queue_mutex);
 		m_stop = true;

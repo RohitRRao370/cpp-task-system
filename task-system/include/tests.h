@@ -1,7 +1,7 @@
 #ifndef TESTS_H
 #define TESTS_H
 #include <string>
-int printNew ();
-std::string printStr ();
+int returnMult (int, int);
+std::string returnStr (std::string, std::string);
 void printNothing ();
 #endif

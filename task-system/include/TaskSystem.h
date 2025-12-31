@@ -34,6 +34,7 @@ private:
 	std::condition_variable cv { };
 
 public:
+	~TaskSystem();
 	TaskSystem (int32_t tasks);
 	TaskSystem () {
 		m_tasks = static_cast<int>(std::thread::hardware_concurrency());
@@ -46,10 +47,14 @@ public:
 	void worker ();
 
 	// function to add tasks to jobsystem for processing
-	template <typename F>
-	auto submit (F&& f) -> std::future <decltype(f())>{
-		using RET = decltype(f());
-		auto task = std::make_shared<std::packaged_task<RET()>> (std::forward<F>(f));
+	template <typename F, typename... Args>
+	auto submit (F&& f, Args&&... args) -> std::future <std::invoke_result_t<F, Args...>> {
+		using RET = std::invoke_result_t<F, Args...>;
+		auto task = std::make_shared<std::packaged_task<RET()>> (
+				[func = std::forward<F>(f), ...params = std::forward<Args>(args)]() mutable -> RET {
+				return std::invoke(func, params...);
+				}
+				);
 		auto result = task->get_future();
 		{
 			std::lock_guard <std::mutex> lock (m_queue_mutex);
@@ -62,8 +67,6 @@ public:
 		return result;
 	}
 
-	// cleanup after end of tasks
-	void end ();
 };
 
 #endif
