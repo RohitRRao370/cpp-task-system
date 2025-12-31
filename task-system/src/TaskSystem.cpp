@@ -1,9 +1,10 @@
+#include "TaskSystem.h"
+#include <iostream>
 #include <functional>
 #include <queue>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
-#include "TaskSystem.h"
 
 TaskSystem::TaskSystem(int32_t tasks)
 	: m_tasks (tasks)
@@ -30,7 +31,11 @@ void TaskSystem::worker ()
 			m_task_queue.pop();
 		}
 
-		task();
+		try {
+			task();
+		} catch (...) {
+			std::cout << "Error while executing task\n";
+		}
 	}
 }
 TaskSystem::~TaskSystem () {

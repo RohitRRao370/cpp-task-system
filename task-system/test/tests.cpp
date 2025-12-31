@@ -9,6 +9,9 @@ int returnMult (int a, int b) {
 std::string returnStr (std::string start, std::string end) {
 	return start + end;
 }
+void throwException () {
+	throw -1;
+}
 
 // display functionality with void return values
 void printNothing() {
