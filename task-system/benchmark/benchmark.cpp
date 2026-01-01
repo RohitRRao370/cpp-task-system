@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include "benchmark.h"
+#include "ThreadPoolExecutor.h"
 
 void benchmark() {
 
@@ -24,7 +25,8 @@ void benchmark() {
 	std::chrono::time_point startjs = std::chrono::steady_clock::now();
 	std::chrono::time_point endjs = std::chrono::steady_clock::now();
 	{
-		TaskSystem js;
+		ThreadPoolExecutor exec {};
+		TaskSystem js(exec);
 		std::vector<std::future<void>> futures;
 		futures.reserve(N);
 

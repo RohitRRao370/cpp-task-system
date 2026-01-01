@@ -1,6 +1,8 @@
 # Build directories
 /build/
 /task-system/build/
+/job-system/build/
+/executor/build/
 /cmake-build-*/
 
 # CMake generated files
@@ -20,4 +22,6 @@ cmake_install.cmake
 
 # clangd
 /.cache/
-/task-system/.cache
+/task-system/.cache/
+/executor/.cache/
+/job-system/.cache/
