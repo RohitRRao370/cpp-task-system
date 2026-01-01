@@ -1,8 +1,26 @@
-# Task system library.
+# Task system library
 
-This is a task system library. Using this system provides an 89% speedup
+## Overview
+
+This is a task system library. Using this system provides upto an 89% speedup
 over using standard threads for large-scale, fine-grained workloads. This is
 accomplished by reducing task submission overhead.
+
+## Build and run
+
+### Requirements
+- C++17 or later
+- CMake ≥ 3.16
+- A POSIX system (Linux/macOS tested)
+
+### Build
+```bash
+git clone https://github.com/RohitRRao370/cpp-task-system.git
+cd cpp-task-system
+mkdir build && cd build
+cmake ..
+make
+```
 
 # Architecture overview
 
@@ -11,9 +29,12 @@ tasks on a fixed pool of worker threads.
 
 The system consists of:
 
-- A TaskSystem class that owns and manages worker threads
+- A ThreadPoolExecutor class that creates a base pool of threads to execute
+jobs or tasks upon.
 
-- A thread-safe task queue storing callable tasks
+- A TaskSystem class that submits tasks to a ThreadPoolExecutor instance
+
+- A thread-safe task queue storing callable tasks in the ThreadPoolExecutor
 
 - A condition-variable–based scheduler that efficiently blocks idle workers
 
@@ -22,9 +43,21 @@ asynchronously by worker threads. Threads are created once during
 initialization and reused for the lifetime of the system to avoid
 thread creation overhead.
 
-# Threading Model
+## Executor
 
-The task system uses a fixed-size thread pool. The number of worker threads is
+The ThreadPoolExecutor class creates a pool of threads each of which run in a
+loop until a task is available for them in the task queue. Ownership for a job
+is unique for each job.
+
+## Task system
+
+The task system is a light-weight wrapper on top of the executor to submit tasks
+to the thread pool queue. Results of the tasks are obtained using futures.
+Exceptions are propogated through said futures.
+
+## Threading Model
+
+The executor class uses a fixed-size thread pool. The number of worker threads is
 specified by the user at construction time, defaulting to
 std::thread::hardware\_concurrency().
 
@@ -48,7 +81,7 @@ Synchronization is achieved using:
 Shutdown is cooperative: the destructor sets a stop flag, notifies all worker
 threads, and joins them to ensure a clean termination.
 
-# Known limitations
+## Known limitations
 
 This implementation intentionally prioritizes correctness and clarity over
 advanced scheduling features. Known limitations include:
@@ -67,15 +100,15 @@ These tradeoffs were chosen to keep the implementation simple and correct.
 The design can be extended to support more advanced scheduling strategies
 if required.
 
-# Usage
+## Architectural evolution
 
-The method of usage is as follows:
+The thread pool and task system started off coupled. Later the thread pool
+was refactored into a separate class. This separation also permitted
+move-only jobs.
 
-1. Instantiate a TaskSystem class with the required number of threads
+## Future work
 
-2. Submit tasks for processing using the TaskSystem.submit funciton
-
-3. Shutdown the system using TaskSystem.end to wake all threads and join
-them back to the main function.
+The implementation could later be updated to include a job system and
+dependencies.
 
 _Note: Originally started as a job system, refactored after clearing semantics_
